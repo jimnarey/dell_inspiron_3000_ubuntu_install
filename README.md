@@ -14,6 +14,8 @@ involved to get everything working nicely.
 
 ## Installation
 
+*This wipes Windows and anything else from the disk. Completely!*
+
 - Disable secure boot in the bios
 
 - Insert a bootable Xubuntu Live USB 
@@ -22,7 +24,7 @@ involved to get everything working nicely.
   menu. Choose 'GPT' from the drop-down.
   
 - Start the installation program. Either create a swap partition larger than the device's total RAM (I used 18GB for
-  a 16GB machine) or do this later in Gparted. Using a swap partition reduces the changes of running into problems with
+  a 16GB machine) or do this later in Gparted. Using a swap partition reduces the chances of running into problems with
   hibernate later. Otherwise, no special settings are required.
   
 ## Post Installation
@@ -67,7 +69,7 @@ involved to get everything working nicely.
 
 The one major thing which doesn't work out of the box. To get it working:
 
-- Some more packages needed:
+- Some more packages are needed:
 
     `sudo apt install pm-utils hibernate`
 
@@ -180,6 +182,10 @@ can be adapted or adding the following line will work:
     mkdir -p "$(rbenv root)"/plugins
     git clone https://github.com/rbenv/ruby-build.git "$(rbenv root)"/plugins/ruby-build
     ```
+
+- You can now install your preferred verison of Ruby with something like:
+
+    `rbenv install 2.7.2`
 
 ### Install Node
 
