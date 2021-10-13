@@ -385,6 +385,20 @@ pass insert docker-credential-helpers/docker-pass-initialized-check
   }
   ```
 
+## Other Issues
+
+- If kernel updates (or something else) start causing warnings like this on `update-initramfs -u`, visit this page:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git/tree/i915
+
+  ...and download the missing firmware.
+
+- Then run:
+
+  ```
+  sudo cp ~/Downloads/*.bin /lib/firmware/i915/
+  ```
+
 ## References
 
 - [Enable hibernate](https://askubuntu.com/questions/1240123/how-to-enable-the-hibernate-option-in-ubuntu-20-04). You'll
