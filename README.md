@@ -188,6 +188,7 @@ The one major thing which doesn't work out of the box. To get it working:
   chmod +x change-gdm-background
   ```
 
+
 ### Power management settings
 
 - In Xubuntu you can select 'hibernate' as an option for actions such as pressing the power button or closing the lid,
@@ -303,6 +304,87 @@ This is entirely optional but is why I wanted a laptop which plays nicely with L
 - Setting up your GOPATH properly makes life easier.
   See [this](https://hackersandslackers.com/create-your-first-golang-app/).
 
+
+### Docker
+
+- Run the following commands to install Docker:
+
+
+  ```
+  sudo apt-get update
+  sudo apt-get install \
+      apt-transport-https \
+      ca-certificates \
+      curl \
+      gnupg \
+      lsb-release
+  
+  curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+  
+  echo \
+    "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu \
+    $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+  
+  sudo apt-get update
+  sudo apt-get install docker-ce docker-ce-cli containerd.io
+  ```
+
+- Install and setup pass to secure any login details used with Docker. Install pass.
+
+
+  ```
+  sudo apt-get install pass
+  ```
+
+- And docker-credential-pass (check for more recent version:
+
+
+  ```
+  wget https://github.com/docker/docker-credential-helpers/releases/download/v0.6.0/docker-credential-pass-v0.6.0-amd64.tar.gz
+  tar -xf docker-credential-pass-v0.6.0-amd64.tar.gz
+  mv docker-credential-pass ~/.local/bin
+  ```
+  
+  ```
+  gpg --generate-key
+  ```
+
+- Enter the following command, replacing the X's with the long gpg-id from the last command (something like 5BB54DF1XXXXXXXXF87XXXXXXXXXXXXXX945A):
+
+
+  ```
+  pass init XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+  ```
+
+- Then run the following command, entering a password when asked:
+
+```
+pass insert docker-credential-helpers/docker-pass-initialized-check
+```
+
+- Run the following. You should see your password in the output:
+
+
+  ```
+  pass show docker-credential-helpers/docker-pass-initialized-check
+  ```
+
+- Then run the following command. You should see `#{}` in the output. 
+
+
+  ```
+  docker-credential-pass list
+  ```
+
+- Open `~/.docker/config.json` and add the following:
+
+
+  ```
+  {
+    "credsStore": "pass"
+  }
+  ```
+
 ## References
 
 - [Enable hibernate](https://askubuntu.com/questions/1240123/how-to-enable-the-hibernate-option-in-ubuntu-20-04). You'll
@@ -330,3 +412,17 @@ This is entirely optional but is why I wanted a laptop which plays nicely with L
 - To install a different icon pack, download the tar.gz from [here](https://www.gnome-look.org/p/1425426/) and extract
   it (including containing directory)
   into ~/.themes.
+
+- [Setup pass for Docker](https://github.com/docker/docker-credential-helpers/issues/102)
+
+- [Replace Nautilus with Nemo](https://askubuntu.com/questions/1066752/how-to-set-nemo-as-the-default-file-manager-in-ubuntu/1173861#1173861)
+
+- Replace Nautilus with Nemo:
+
+
+  ```
+  sudo apt update
+  sudo apt install nemo
+  xdg-mime default nemo.desktop inode/directory application/x-gnome-saved-search
+  gsettings set org.gnome.desktop.background show-desktop-icons false
+  gsettings set org.nemo.desktop show-desktop-icons true
