@@ -203,10 +203,10 @@ The one major thing which doesn't work out of the box. To get it working:
 
 If desired...
 
-    ```
-    wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-    apt install google-chrome-stable_current_amd64.deb
-    ```
+  ```
+  wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+  apt install google-chrome-stable_current_amd64.deb
+  ```
 
 ## Setting up a basic development environment
 
@@ -214,18 +214,19 @@ This is entirely optional but is why I wanted a laptop which plays nicely with L
 
 ### Install packages:
 
-    `sudo apt install lsb-releasegnupg ca-certificates apt-transport-https build-essential git gparted python3-pip zsh \
-          openssh-server wget curl vim terminator fonts-powerline tmux pass rbenv`
+  ```  
+  sudo apt install lsb-releasegnupg ca-certificates apt-transport-https build-essential git gparted python3-pip zsh \
+          openssh-server wget curl vim terminator fonts-powerline tmux pass rbenv
+  ```
 
 ### Install Sublime Text:
 
-    ```
-    wget -qO - https://download.sublimetext.com/sublimehq-pub.gpg | sudo apt-key add -
-    sudo apt-get install apt-transport-https
-    echo "deb https://download.sublimetext.com/ apt/stable/" | sudo tee /etc/apt/sources.list.d/sublime-text.list
-    apt-get update
-    apt-get install sublime-text
-    ```
+  ```
+  wget -qO - https://download.sublimetext.com/sublimehq-pub.gpg | sudo apt-key add -
+  echo "deb https://download.sublimetext.com/ apt/stable/" | sudo tee /etc/apt/sources.list.d/sublime-text.list
+  apt-get update
+  apt-get install sublime-text
+  ```
 
 ### Install zsh/oh-my-zsh:
 
@@ -397,7 +398,6 @@ This is entirely optional but is why I wanted a laptop which plays nicely with L
   ...and download the missing firmware.
 
 - Then run:
-
 
   ```
   sudo cp ~/Downloads/*.bin /lib/firmware/i915/
