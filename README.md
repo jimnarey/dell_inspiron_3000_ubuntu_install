@@ -32,6 +32,11 @@ nicely.
 
 ### General
 
+Depending on options chosen during install, the following may not be necessary. Check for Wifi connectivity and the
+running kernel before proceeding:
+
+`uname -a`
+
 - If using Xubuntu open Window Manager settings and choose one of the HDPI or XHDPI themes. Otherwise finding the right
   spot with the mouse pointer to do things like resize windows is a pain.
 
@@ -59,7 +64,7 @@ nicely.
 
   `sudo apt purge linux-image-XXXXXXX-XXXXXX`
 
-  (You can see all the install kernels with `dpkg --list | grep linux-image`)
+  (You can see all the installed kernels with `dpkg --list | grep linux-image`)
 
 - One of the installed kernels would not shift (even though apt reported no errors) due to its counterpart linux-modules
   package being dependent on it. The linux-modules package wouldn't shift either because of the kernel's dependency on
@@ -97,7 +102,6 @@ The one major thing which doesn't work out of the box. To get it working:
   `sudo nano /etc/polkit-1/localauthority/50-local.d/com.ubuntu.enable-hibernate.pkla`
 
 - Add the following to the (in my case) new/blank file:
-  
 
   ```
   [Re-enable hibernate by default in upower]
@@ -168,26 +172,23 @@ The one major thing which doesn't work out of the box. To get it working:
   Menu Layout, Modern Menu Layouts, select 'Redmond Menu Style' and under 'Menu Theme' select 'Override Menu Theme' and
   select 'Dark Blue Theme'.
 
-- To remove the background image on the Desktop, open gnome-tweaks, go to 'Appearance' and under
-  the name of the image file, select 'None'. Then run:
-
+- To remove the background image on the Desktop, open gnome-tweaks, go to 'Appearance' and under the name of the image
+  file, select 'None'. Then run:
 
   ```
   gsettings set org.gnome.desktop.background picture-options 'none'
   gsettings set org.gnome.desktop.background primary-color '#000000'
   ```
 
-- Open gnome-tweaks, Appearance and change the theme to Adwiata-dark. 
+- Open gnome-tweaks, Appearance and change the theme to Adwiata-dark.
 
 - To change the lockscreen background:
-
 
   ```
   sudo apt install libglib2.0-dev-bin
   wget github.com/thiggy01/change-gdm-background/raw/master/change-gdm-background
   chmod +x change-gdm-background
   ```
-
 
 ### Power management settings
 
@@ -198,13 +199,23 @@ The one major thing which doesn't work out of the box. To get it working:
   completely. It causes the desktop/menu/everything to be completely unresponsive after suspend (though oddly, not
   hibernate). You can always set the screen to go blank after a set time in the Power Management Settings.
 
+### Install Chrome
+
+If desired...
+
+    ```
+    wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+    apt install google-chrome-stable_current_amd64.deb
+    ```
+
 ## Setting up a basic development environment
 
 This is entirely optional but is why I wanted a laptop which plays nicely with Linux.
 
 ### Install packages:
 
-    `sudo apt install build-essential git gparted python3-pip zsh openssh-server wget curl vim terminator fonts-powerline tmux code`
+    `sudo apt install lsb-releasegnupg ca-certificates apt-transport-https build-essential git gparted python3-pip zsh \
+          openssh-server wget curl vim terminator fonts-powerline tmux pass rbenv`
 
 ### Install Sublime Text:
 
@@ -232,19 +243,7 @@ This is entirely optional but is why I wanted a laptop which plays nicely with L
 
 ### Install Ruby
 
-- Run the following:
-
-    ```
-    apt-get install -y libssl-dev libreadline-dev zlib1g-dev ruby
-    wget -q https://github.com/rbenv/rbenv-installer/raw/master/bin/rbenv-installer -O- | bash
-    ```
-
-- Open `~/.zshrc` and add `$HOME/.rbenv/bin` to your path. You may have an existing line beginning `export PATH=` which
-  can be adapted or adding the following line will work:
-
-  `export PATH=$HOME/.rbenv/bin:$PATH`
-
-- Add the following line somewhere in the same file, after the line setting the PATH variable:
+- Add the following line to the end of `~/.zshrc`, after the line setting the PATH variable:
 
   `eval "$(rbenv init -)"`
 
@@ -253,7 +252,6 @@ This is entirely optional but is why I wanted a laptop which plays nicely with L
   `exec $SHELL`
 
 - Install ruby-build with the following lines:
-
 
     ```
     mkdir -p "$(rbenv root)"/plugins
@@ -268,13 +266,11 @@ This is entirely optional but is why I wanted a laptop which plays nicely with L
 
 - There may be a more recent version of NVM by the time you are reading this, in which case check the version number:
 
-
     ```
-    wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.34.0/install.sh | bash
+    wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash
     ```
 
 - NVM should give a set of lines to add to `~/.zshrc` but it's usually these:
-
 
     ```
     export NVM_DIR="$HOME/.nvm"
@@ -284,11 +280,10 @@ This is entirely optional but is why I wanted a laptop which plays nicely with L
 
 ### Virtualenv
 
-    `pip3 install virtualenv virtualenvwrapper`
+`pip3 install virtualenv virtualenvwrapper`
 
 - Add the following lines to `~/.zshrc`. Adapt them as required to suit where you keep your projects and where you want
   to keep your virtualenvs.
-
 
     ```
     export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3
@@ -304,21 +299,11 @@ This is entirely optional but is why I wanted a laptop which plays nicely with L
 - Setting up your GOPATH properly makes life easier.
   See [this](https://hackersandslackers.com/create-your-first-golang-app/).
 
-
 ### Docker
 
 - Run the following commands to install Docker:
 
-
-  ```
-  sudo apt-get update
-  sudo apt-get install \
-      apt-transport-https \
-      ca-certificates \
-      curl \
-      gnupg \
-      lsb-release
-  
+  ```  
   curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
   
   echo \
@@ -329,28 +314,24 @@ This is entirely optional but is why I wanted a laptop which plays nicely with L
   sudo apt-get install docker-ce docker-ce-cli containerd.io
   ```
 
-- Install and setup pass to secure any login details used with Docker. Install pass.
+- Add your user to the docker group:
 
+  `usermod -aG docker $USER`
 
-  ```
-  sudo apt-get install pass
-  ```
-
-- And docker-credential-pass (check for more recent version:
-
+- Setup pass and docker-credential-pass (check for more recent version):
 
   ```
   wget https://github.com/docker/docker-credential-helpers/releases/download/v0.6.0/docker-credential-pass-v0.6.0-amd64.tar.gz
   tar -xf docker-credential-pass-v0.6.0-amd64.tar.gz
   mv docker-credential-pass ~/.local/bin
   ```
-  
+
   ```
   gpg --generate-key
   ```
 
-- Enter the following command, replacing the X's with the long gpg-id from the last command (something like 5BB54DF1XXXXXXXXF87XXXXXXXXXXXXXX945A):
-
+- Enter the following command, replacing the X's with the long gpg-id from the last command (something like
+  5BB54DF1XXXXXXXXF87XXXXXXXXXXXXXX945A):
 
   ```
   pass init XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
@@ -358,32 +339,54 @@ This is entirely optional but is why I wanted a laptop which plays nicely with L
 
 - Then run the following command, entering a password when asked:
 
-```
-pass insert docker-credential-helpers/docker-pass-initialized-check
-```
+  ```
+  pass insert docker-credential-helpers/docker-pass-initialized-check
+  ```
 
 - Run the following. You should see your password in the output:
-
 
   ```
   pass show docker-credential-helpers/docker-pass-initialized-check
   ```
 
-- Then run the following command. You should see `#{}` in the output. 
-
+- Then run the following command. You should see `#{}` in the output.
 
   ```
   docker-credential-pass list
   ```
 
-- Open `~/.docker/config.json` and add the following:
-
+- Open `~/.docker/config.json` and add the following (you may need to create the .docker folder):
 
   ```
   {
     "credsStore": "pass"
   }
   ```
+
+## Backing up the System Partition
+
+- Boot back into the Live USB environment. Mount the system partition by clicking on it in the file manager and use the
+  terminal to cd into it, probably at something like `/media/ubuntu/PARTNAME`.
+
+- Run the following commands to clear unused space an improve the compression of the backup:
+
+  ```
+  cat /dev/zero > zero.file
+  sync
+  rm zero.file
+  ```
+
+- Unmount the system partition with something like `sudo umount /dev/sda2`
+
+- Cd into the directory where you want to create the backup and run the following command, replacing `/dev/sda2` with
+  the correct device path for your system partition.
+
+  `dd if=/dev/sda2 | gzip -9 > image_name.img.gz`
+
+- To restore the backup, boot into Ubuntu via USB and navigate to the backup location in the terminal, then run the
+  following, again checking the device name and that the device is unmounted:
+
+  `zcat image_name.img.gz | dd of=/dev/sda2`
 
 ## Other Issues
 
@@ -395,9 +398,13 @@ pass insert docker-credential-helpers/docker-pass-initialized-check
 
 - Then run:
 
+
   ```
   sudo cp ~/Downloads/*.bin /lib/firmware/i915/
   ```
+
+- Hibernate can stop working, apparently inexplicably. Make regular backups of the system partition to ensure you can
+  roll back.
 
 ## References
 
@@ -432,7 +439,6 @@ pass insert docker-credential-helpers/docker-pass-initialized-check
 - [Replace Nautilus with Nemo](https://askubuntu.com/questions/1066752/how-to-set-nemo-as-the-default-file-manager-in-ubuntu/1173861#1173861)
 
 - Replace Nautilus with Nemo:
-
 
   ```
   sudo apt update
